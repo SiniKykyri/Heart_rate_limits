@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 export default function App() {
@@ -7,15 +7,20 @@ export default function App() {
   const [lowerlimit, setLowerlimit] = useState(0);
   const [upperlimit, setUpperlimit] = useState(0);
 
+  // Päivittää rajat aina kun ikä muuttuu
   useEffect(() => {
     if(age !== ''){
-      const ageNumber = parseFloat(age);
-      const lowerLimitResult = (220 - ageNumber) * 0.65;
-      setLowerlimit(lowerLimitResult.toFixed(0));
-      const upperLimitResult = (220 - ageNumber) * 0.85;
-      setUpperlimit(upperLimitResult.toFixed(0));
+   calculateLimits(age);
     }
   }, [age]);
+
+function calculateLimits(age){
+  const ageNumber = parseFloat(age);
+  const lowerLimitResult = (220 - ageNumber) * 0.65;
+  setLowerlimit(lowerLimitResult.toFixed(0));
+  const upperLimitResult = (220 - ageNumber) * 0.85;
+  setUpperlimit(upperLimitResult.toFixed(0));
+}
 
   return (
     <View style={styles.container}>
@@ -27,6 +32,7 @@ export default function App() {
       />
       <Text style={styles.text}>Hr Limits</Text>
       <Text>{lowerlimit} - {upperlimit}</Text>
+      <Button  onPress={() => calculateLimits(age)} title="Calculate"></Button>
       <StatusBar style="auto" />
     </View>
   );
